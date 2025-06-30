@@ -4,27 +4,32 @@
   <meta charset="UTF-8">
   <title>My CV</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; }
-    .top-bar { margin-bottom: 20px; }
-    iframe { width: 100%; height: 90vh; border: none; }
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
     .button {
       display: inline-block;
-      padding: 10px 15px;
+      margin-bottom: 20px;
+      padding: 10px 20px;
       background: #007acc;
       color: white;
       text-decoration: none;
       border-radius: 5px;
     }
+    img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    }
   </style>
 </head>
 <body>
-  <div class="top-bar">
-    <a class="button" href="/">🏠 Home</a>
-  </div>
-
+  <a class="button" href="/">🏠 Home</a>
   <h1>My Curriculum Vitae</h1>
 
-  <!-- Embed the PDF -->
-  <iframe src="https://drive.google.com/file/d/1F4VNhSZPm8bpjY62RujA_iL0aKtq2U6G/view?usp=drivesdk" allow="autoplay"></iframe>
+  <img src="cv-page1.png" alt="CV Page 1">
 </body>
 </html>
