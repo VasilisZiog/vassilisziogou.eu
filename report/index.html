@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Power BI Report</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: white;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background-color: #000000;
+    }
+
+    .button {
+      padding: 10px 20px;
+      background: none;
+      color: white;
+      text-decoration: none;
+      border: 2px solid white;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .button:hover {
+      background: white;
+      color: #000;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 30px 0 10px;
+    }
+
+    .report-container {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 1200px;
+      height: 85vh;
+      border: none;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="button" href="/">🏠 Home</a>
+    <a class="button" href="/cv">📄 My CV</a>
+  </header>
+
+  <h1>📊 Embedded Power BI Report</h1>
+
+  <div class="report-container">
+    <iframe src="https://app.powerbi.com/reportEmbed?reportId=d158893b-7149-4771-9e14-6bc18b955df7&autoAuth=true&ctid=e2e970a5-c550-4675-93b6-8ba06a7582d3&actionBarEnabled=true" allowfullscreen></iframe>
+  </div>
+</body>
+</html>
