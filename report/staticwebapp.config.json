@@ -10,10 +10,23 @@
       }
     }
   },
+
   "routes": [
-    { "route": "/report/*", "allowedRoles": ["authenticated"] }
+    {
+      "route": "/report/*",
+      "allowedRoles": ["authenticated"]
+    }
   ],
+
   "responseOverrides": {
-    "401": { "statusCode": 302, "redirect": "/.auth/login/aad" }
+    "401": {
+      "statusCode": 302,
+      "redirect": "/.auth/login/aad"
+    },
+
+    "301": {
+      "statusCode": 301,
+      "redirect": "https://www.vassilisziogou.eu{path}"
+    }
   }
 }
