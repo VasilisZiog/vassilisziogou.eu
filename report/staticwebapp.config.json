@@ -1,1 +1,0 @@
-{"routes":[{"route":"/report/*","allowedRoles":["authenticated"]}],"responseOverrides":{"301":{"statusCode":301,"redirect":"https://www.vassilisziogou.eu{path}"},"401":{"statusCode":302,"redirect":"/.auth/login/aad"}}}
