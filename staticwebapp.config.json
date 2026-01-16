@@ -1,6 +1,17 @@
 {
+  "auth": {
+    "identityProviders": {
+      "azureActiveDirectory": {
+        "registration": {
+          "openIdIssuer": "https://login.microsoftonline.com/YOUR_TENANT_ID_HERE/v2.0",
+          "clientIdSettingName": "AZURE_CLIENT_ID",
+          "clientSecretSettingName": "AZURE_CLIENT_SECRET"
+        }
+      }
+    }
+  },
   "routes": [
-    { "route": "/report", "allowedRoles": ["reader"] },
-    { "route": "/report/*", "allowedRoles": ["reader"] }
+    { "route": "/report", "allowedRoles": ["authenticated"] },
+    { "route": "/report/*", "allowedRoles": ["authenticated"] }
   ]
 }
