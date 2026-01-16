@@ -1,6 +1,6 @@
 {
   "routes": [
-    { "route": "/report", "allowedRoles": ["authenticated"] },
-    { "route": "/report/*", "allowedRoles": ["authenticated"] }
+    { "route": "/report", "allowedRoles": ["reader"] },
+    { "route": "/report/*", "allowedRoles": ["reader"] }
   ]
 }
