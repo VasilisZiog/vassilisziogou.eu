@@ -1,1 +1,10 @@
-{"routes":[{"route":"/report","allowedRoles":["authenticated"]},{"route":"/report/*","allowedRoles":["authenticated"]}]}
+{
+  "routes": [
+    {
+      "route": "/report",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    }
+  ]
+}
