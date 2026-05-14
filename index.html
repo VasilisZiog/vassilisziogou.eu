@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vasilis Ziogou — Data Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal: #00C9C9;
+      --teal-dim: #007f7f;
+      --dark: #080c10;
+      --darker: #040608;
+      --text: #e8e8e8;
+      --muted: #7a8a8a;
+      --line: rgba(0,201,201,0.2);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      overflow-x: hidden;
+    }
+
+    /* ── STAR BACKGROUND ── */
+    #stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .star {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: var(--teal);
+      border-radius: 50%;
+      opacity: 0;
+      animation: twinkle var(--d, 4s) var(--delay, 0s) infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; }
+      50% { opacity: var(--op, 0.5); }
+    }
+
+    /* ── PROGRESS BAR ── */
+    #progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: var(--teal);
+      z-index: 100;
+      transition: width 0.1s;
+      box-shadow: 0 0 10px var(--teal);
+    }
+
+    /* ── VERTICAL TIMELINE LINE ── */
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--teal-dim), transparent);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 80px 40px;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      flex-direction: column;
+      text-align: center;
+      background: radial-gradient(ellipse at center, #0a1a1a 0%, var(--dark) 70%);
+    }
+    #hero .greeting {
+      font-size: 0.75rem;
+      letter-spacing: 0.4em;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 1s 0.3s forwards;
+    }
+    #hero .my-name-is {
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      color: var(--muted);
+      letter-spacing: 0.2em;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 1s 0.5s forwards;
+    }
+    #hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 7vw, 7rem);
+      font-weight: 700;
+      line-height: 1;
+      color: var(--text);
+      opacity: 0;
+      animation: fadeUp 1s 0.6s forwards;
+    }
+    #hero h1 span { color: var(--text); }
+    #hero .role {
+      font-size: clamp(0.8rem, 2vw, 1rem);
+      color: var(--muted);
+      letter-spacing: 0.25em;
+      margin-top: 16px;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 1s 0.9s forwards;
+    }
+    #hero .scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 1s 1.5s forwards;
+    }
+    .scroll-arrow {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--teal), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+
+    /* ── CHAPTER SECTIONS ── */
+    .chapter {
+      position: relative;
+      z-index: 1;
+    }
+    .chapter-inner {
+      max-width: 700px;
+      opacity: 0;
+      transform: translateY(60px);
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .chapter-inner.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .chapter-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chapter-tag::before {
+      content: '';
+      display: inline-block;
+      width: 30px;
+      height: 1px;
+      background: var(--teal);
+    }
+    .chapter h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.15;
+      font-weight: 400;
+      margin-bottom: 24px;
+    }
+    .chapter h2 em {
+      font-style: italic;
+      color: var(--teal);
+    }
+    .chapter p {
+      font-size: 0.9rem;
+      line-height: 1.9;
+      color: var(--text);
+      max-width: 540px;
+    }
+    .chapter p strong { color: var(--text); font-weight: 400; }
+
+    /* ── ORIGIN ── */
+    #origin { background: var(--darker); }
+    #origin::before {
+      content: 'KASTORIA';
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      font-size: 18vw;
+      color: rgba(0,201,201,0.03);
+      font-weight: 700;
+      pointer-events: none;
+      white-space: nowrap;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* ── STUDIES ── */
+    #studies { background: var(--dark); }
+    .degree-list {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .degree-item {
+      border-left: 2px solid var(--teal-dim);
+      padding-left: 20px;
+    }
+    .degree-item .deg-title {
+      font-size: 0.85rem;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .degree-item .deg-sub {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── CAREER SECTION ── */
+    #career { background: var(--darker); flex-direction: column; padding-top: 100px; padding-bottom: 100px; }
+    .career-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      text-align: center;
+      margin-bottom: 70px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s, transform 0.9s;
+    }
+    .career-title.visible { opacity: 1; transform: translateY(0); }
+    .career-title span { color: var(--teal); }
+
+    .jobs {
+      width: 100%;
+      max-width: 900px;
+      position: relative;
+    }
+    .jobs::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--teal-dim), transparent);
+      transform: translateX(-50%);
+    }
+    .job {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      gap: 0;
+      margin-bottom: 60px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s, transform 0.8s;
+    }
+    .job.visible { opacity: 1; transform: translateY(0); }
+    .job:nth-child(odd) .job-content { grid-column: 1; text-align: right; padding-right: 40px; }
+    .job:nth-child(odd) .job-dot { grid-column: 2; }
+    .job:nth-child(odd) .job-empty { grid-column: 3; }
+    .job:nth-child(even) .job-empty { grid-column: 1; }
+    .job:nth-child(even) .job-dot { grid-column: 2; }
+    .job:nth-child(even) .job-content { grid-column: 3; text-align: left; padding-left: 40px; }
+
+    .job-dot {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 4px;
+    }
+    .job-dot::after {
+      content: '';
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 0 0 12px var(--teal);
+      flex-shrink: 0;
+    }
+    .job-dates {
+      font-size: 0.65rem;
+      color: var(--teal);
+      letter-spacing: 0.15em;
+      margin-bottom: 8px;
+    }
+    .job-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      margin-bottom: 4px;
+    }
+    .job-company {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+      letter-spacing: 0.1em;
+    }
+    .job-desc {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── CAREER INTRO ── */
+    #career-intro { background: var(--darker); }
+    #career-intro .chapter-inner { max-width: 600px; }
+
+    /* ── FULL JOB SECTIONS ── */
+    .job-section {
+      background: var(--dark);
+      align-items: center;
+      justify-content: center;
+    }
+    .job-section:nth-child(even) { background: var(--darker); }
+
+    .job-full {
+      display: flex;
+      gap: 50px;
+      max-width: 800px;
+      width: 100%;
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
+    }
+    .job-full.visible { opacity: 1; transform: translateX(0); }
+
+    .job-full-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      padding-top: 6px;
+    }
+    .job-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      color: var(--teal);
+      opacity: 0.2;
+      line-height: 1;
+      font-weight: 700;
+    }
+    .job-timeline-line {
+      flex: 1;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--teal-dim), transparent);
+      margin-top: 12px;
+      min-height: 60px;
+    }
+    .job-full-right { flex: 1; }
+    .job-title-big {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      margin: 8px 0 6px;
+      line-height: 1.1;
+    }
+    .job-company-big {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      margin-bottom: 24px;
+    }
+    .job-bullets {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .job-bullets li {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.7;
+      padding-left: 18px;
+      position: relative;
+    }
+    .job-bullets li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--teal-dim);
+    }
+    .job-bullets li strong { color: var(--text); font-weight: 400; }
+
+    @media (max-width: 600px) {
+      .job-full { flex-direction: column; gap: 20px; }
+      .job-full-left { flex-direction: row; align-items: center; gap: 16px; }
+      .job-timeline-line { display: none; }
+    }
+
+    /* ── SKILLS ── */
+    #skills { background: var(--dark); flex-direction: column; }
+    .skills-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: 50px;
+      color: var(--text);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s, transform 0.8s;
+    }
+    .skills-title.visible { opacity: 1; transform: translateY(0); }
+    .skills-title span { color: var(--text); }
+    .skill-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      max-width: 800px;
+      opacity: 0;
+      transition: opacity 1s 0.3s;
+    }
+    .skill-cloud.visible { opacity: 1; }
+    .skill-tag {
+      padding: 6px 16px;
+      border: 1px solid var(--teal-dim);
+      border-radius: 2px;
+      font-size: 0.7rem;
+      color: var(--teal);
+      letter-spacing: 0.1em;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+      cursor: default;
+    }
+    .skill-tag:hover {
+      background: var(--teal);
+      color: var(--dark);
+      box-shadow: 0 0 20px rgba(0,201,201,0.4);
+    }
+
+    /* ── CTA / FOOTER ── */
+    #cta {
+      background: var(--darker);
+      flex-direction: column;
+      text-align: center;
+      gap: 30px;
+    }
+    #cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s, transform 0.9s;
+    }
+    #cta h2.visible { opacity: 1; transform: translateY(0); }
+    #cta h2 span { color: var(--teal); font-style: italic; }
+    .cta-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      transition: opacity 0.9s 0.3s;
+    }
+    .cta-links.visible { opacity: 1; }
+    .cta-btn {
+      padding: 12px 30px;
+      border: 1px solid var(--teal);
+      color: var(--teal);
+      text-decoration: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+    }
+    .cta-btn:hover {
+      background: var(--teal);
+      color: var(--dark);
+      box-shadow: 0 0 30px rgba(0,201,201,0.3);
+    }
+    .cta-btn.secondary {
+      border-color: var(--muted);
+      color: var(--muted);
+    }
+    .cta-btn.secondary:hover {
+      background: var(--muted);
+      color: var(--dark);
+      box-shadow: none;
+    }
+    footer {
+      text-align: center;
+      padding: 30px;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      background: var(--darker);
+      border-top: 1px solid var(--line);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .jobs::before { left: 20px; }
+      .job { grid-template-columns: 40px 1fr; }
+      .job:nth-child(odd) .job-content,
+      .job:nth-child(even) .job-content { grid-column: 2; text-align: left; padding-left: 20px; padding-right: 0; }
+      .job:nth-child(odd) .job-dot,
+      .job:nth-child(even) .job-dot { grid-column: 1; }
+      .job-empty { display: none; }
+      #year-indicator { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="stars"></div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="greeting">HELLO WORLD</div>
+  <div class="my-name-is">My name is</div>
+  <h1><span>Vassilis Ziogou</span></h1>
+  <div class="role">Data Engineer · Athens, Greece</div>
+  <div class="scroll-hint">
+    <span>scroll to explore</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ORIGIN -->
+<section id="origin" class="chapter">
+  <div class="chapter-inner" data-year="1993">
+    <div class="chapter-tag">Origin</div>
+    <h2><em>Raised in Kastoria</em></h2>
+    <p>Riding bikes, breaking rules, and giving my mom headaches alongside my two brothers. She survived. Somehow.</p>
+  </div>
+</section>
+
+<!-- STUDIES -->
+<section id="studies" class="chapter">
+  <div class="chapter-inner" data-year="2013">
+    <div class="chapter-tag">Education</div>
+    <h2><em>Aristotle University of Thessaloniki</em></h2>
+    <p>Two degrees. Two different lenses on the world — the laws of nature, and the architecture of information.</p>
+    <div class="degree-list">
+      <div class="degree-item">
+        <div class="deg-title">BSc in Physics</div>
+        <div class="deg-sub">Full Academic Scholarship</div>
+      </div>
+      <div class="degree-item">
+        <div class="deg-title">MSc in Informatics & Management</div>
+        <div class="deg-sub"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- JOB 1 -->
+<section class="job-section" data-year="2018">
+  <div class="job-full" data-year="2018">
+    <div class="job-full-right">
+      <div class="job-dates">Nov 2018 — Oct 2019</div>
+      <div class="job-title-big">Data Analyst</div>
+      <div class="job-company-big">Deloitte, Risk Advisory · Thessaloniki</div>
+      <ul class="job-bullets">
+        <li>Specialized in cleaning and analyzing financial data to detect discrepancies and inconsistencies.</li>
+        <li>Contributed to the optimization of the reporting process across multiple engagements.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- JOB 2 -->
+<section class="job-section" data-year="2019">
+  <div class="job-full" data-year="2019">
+    <div class="job-full-right">
+      <div class="job-dates">Oct 2019 — Nov 2020</div>
+      <div class="job-title-big">BI Developer</div>
+      <div class="job-company-big">Aqurance, Analytics & Enterprise Applications · Athens</div>
+      <ul class="job-bullets">
+        <li>Specialized in reporting solutions and CRM data analysis in the pharmaceutical sector.</li>
+        <li>Created reports with customized functionalities and KPIs using QlikSense, Spotfire, and Power BI.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- JOB 3 -->
+<section class="job-section" data-year="2020">
+  <div class="job-full" data-year="2020">
+    <div class="job-full-right">
+      <div class="job-dates">Nov 2020 — Feb 2022</div>
+      <div class="job-title-big">BI Consultant</div>
+      <div class="job-company-big">Analytical View · Athens</div>
+      <ul class="job-bullets">
+        <li>Supported and enhanced AML (Anti-Money Laundering) solutions in banking, covering databases, ETLs, and reporting.</li>
+        <li>Improved ETL processes and developed Text Analytics models and reports for various clients.</li>
+        <li>Planned and executed projects end-to-end.</li>
+        <li>Provided technical guidance on Text Analytics projects as part of the presales team.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- JOB 4 -->
+<section class="job-section" data-year="2022">
+  <div class="job-full" data-year="2022">
+    <div class="job-full-right">
+      <div class="job-dates">Feb 2022 — Present</div>
+      <div class="job-title-big">BI Engineer</div>
+      <div class="job-company-big">European Dynamics · Athens</div>
+      <ul class="job-bullets">
+        <li>Designs and implements data solutions on Azure Databricks, leveraging Unity Catalog and Medallion Architecture to transform and analyze maritime data.</li>
+        <li>Manages RBAC roles, creates service principals for automation, and monitors resource costs for secure Azure operations.</li>
+        <li>Handles user/group access to catalogs, storage credentials, clusters, and jobs across the platform.</li>
+        <li>Automates Azure and Databricks provisioning with Jenkins using Groovy, PowerShell, Azure CLI, Databricks CLI, and Bicep/Terraform.</li>
+        <li>Develops SSAS and Power BI reporting solutions, migrating from SAS to SQL Server, for regulatory reporting in EU insurance and pensions supervision.</li>
+        <li>Maintains SSIS packages and data warehouses.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="skills-title" data-animate>What I <span>build with</span></div>
+  <div class="skill-cloud">
+    <span class="skill-tag featured">Microsoft Azure</span>
+    <span class="skill-tag featured">Databricks</span>
+    <span class="skill-tag featured">Python</span>
+    <span class="skill-tag featured">Microsoft Power BI</span>
+    <span class="skill-tag featured">Terraform</span>
+    <span class="skill-tag">Unity Catalog</span>
+    <span class="skill-tag">Microsoft Entra ID</span>
+    <span class="skill-tag">Azure CLI</span>
+    <span class="skill-tag">Databricks CLI</span>
+    <span class="skill-tag">Bicep</span>
+    <span class="skill-tag">SQL</span>
+    <span class="skill-tag">DAX</span>
+    <span class="skill-tag">SSAS</span>
+    <span class="skill-tag">SSIS</span>
+    <span class="skill-tag">SAS</span>
+    <span class="skill-tag">Azure DevOps</span>
+    <span class="skill-tag">Jenkins</span>
+    <span class="skill-tag">git</span>
+    <span class="skill-tag">Power Query</span>
+    <span class="skill-tag">Qlik Sense</span>
+    <span class="skill-tag">Tibco Spotfire</span>
+    <span class="skill-tag">Pentaho Data Integration</span>
+    <span class="skill-tag">Salesforce Platform</span>
+    <span class="skill-tag">Unix</span>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <h2>Let's <span>connect</span></h2>
+  <div class="cta-links">
+    <a href="mailto:vasilis.ziog@gmail.com" class="cta-btn">✉ Email me</a>
+    <a href="https://github.com/VasilisZiog" class="cta-btn" target="_blank">⌂ GitHub</a>
+    <a href="/cv/" class="cta-btn secondary">View full CV</a>
+  </div>
+</section>
+
+<footer>
+  © 2025 Vasilis Ziogou · Data Engineer · Athens, Greece
+</footer>
+
+<script>
+  // Stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `
+      left: ${Math.random()*100}%;
+      top: ${Math.random()*100}%;
+      --d: ${3 + Math.random()*5}s;
+      --delay: ${Math.random()*6}s;
+      --op: ${0.2 + Math.random()*0.5};
+      width: ${Math.random() > 0.8 ? 3 : 2}px;
+      height: ${Math.random() > 0.8 ? 3 : 2}px;
+    `;
+    starsEl.appendChild(s);
+  }
+
+  // Progress bar
+  const progress = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    progress.style.width = pct + '%';
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.25 });
+
+  document.querySelectorAll('.chapter-inner, .job-full, .skill-cloud').forEach(el => observer.observe(el));
+
+  // data-animate elements (titles)
+  const animObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('[data-animate]').forEach(el => animObserver.observe(el));
+</script>
+
+</body>
+</html>
